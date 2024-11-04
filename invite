@@ -12,10 +12,8 @@ local CloseButton = Instance.new("TextButton")
 local CreditsFrame = Instance.new("Frame")
 local CreditsLabel = Instance.new("TextLabel")
 local CopyDiscordLinkButton = Instance.new("TextButton")
-local AutoDropToastButton = Instance.new("TextButton")
 local InfiniteYieldButton = Instance.new("TextButton")
 local AutofarmCustardsButton = Instance.new("TextButton")
-local AutoEatToastButton = Instance.new("TextButton")
 local ToggleVisibilityButton = Instance.new("TextButton")
 local CustardEspButton = Instance.new("TextButton")
 local HalloweenTab = Instance.new("TextButton")
@@ -145,43 +143,6 @@ ContentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 ContentFrame.Position = UDim2.new(0, 100, 0, 30)
 ContentFrame.Size = UDim2.new(1, -100, 1, -30)
 
-
-AutoDropToastButton.Name = "AutoDropToastButton"
-AutoDropToastButton.Parent = ContentFrame
-AutoDropToastButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-AutoDropToastButton.Position = UDim2.new(0.5, -100, 0.1, -15)
-AutoDropToastButton.Size = UDim2.new(0, 200, 0, 30)
-AutoDropToastButton.Font = Enum.Font.SourceSansBold
-AutoDropToastButton.Text = "Auto Drop Toast [Req Tubby Toast]: OFF"
-AutoDropToastButton.TextWrapped = true
-AutoDropToastButton.TextColor3 = Color3.new(1, 1, 1)
-AutoDropToastButton.TextSize = 15.9
-
-local ButtonEnabled = false
-
-local function applyButton()
-while ButtonEnabled do
-local args = {
-    [1] = "drop"
-}
-
-game:GetService("ReplicatedStorage").sendAbility:FireServer(unpack(args))
-       task.wait();
-    end
-end
-
-AutoDropToastButton.MouseButton1Click:Connect(function()
-    ButtonEnabled = not ButtonEnabled
-    if ButtonEnabled then
-        AutoDropToastButton.Text = "Auto Drop Toast: ON"
-        AutoDropToastButton.TextSize = 24
-        spawn(applyButton)
-    else
-        AutoDropToastButton.Text = "Auto Drop Toast: OFF"
-        AutoDropToastButton.TextSize = 24
-    end
-end)
-
 -- UI Button setup for AutoGetHalloweenHats
 AutoGetHalloweenHats.Name = "AutoGetHalloweenHats"
 AutoGetHalloweenHats.Parent = HalloweenFrame
@@ -207,12 +168,12 @@ local function checkHatDropperPosition()
             -- Check if the CFrame has changed from the expected value
             if hatDropper.CFrame ~= expectedCFrame then
                 -- Fire the server event
-                local args = {
-                    [1] = "Player",
-                    [2] = "HauntedMansion"
-                }
+local args = {
+    [1] = "Player",
+    [2] = "CustardFacility"
+}
 
-                game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
+game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
 
                 -- Wait for 3 seconds
                 wait(3)
@@ -403,7 +364,7 @@ end)
 ESPPlayersButton.Name = "ESPPlayersButton"
 ESPPlayersButton.Parent = ContentFrame
 ESPPlayersButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-ESPPlayersButton.Position = UDim2.new(0.5, -100, 0.3, -15)
+ESPPlayersButton.Position = UDim2.new(0.5, -100, 0.1, -15)
 ESPPlayersButton.Size = UDim2.new(0, 200, 0, 30)
 ESPPlayersButton.Font = Enum.Font.SourceSansBold
 ESPPlayersButton.Text = "Esp Players: OFF"
@@ -548,7 +509,7 @@ end)
 AutofarmCustardsButton.Name = "AutofarmCustardsButton"
 AutofarmCustardsButton.Parent = ContentFrame
 AutofarmCustardsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-AutofarmCustardsButton.Position = UDim2.new(0.5, -100, 0.5, -15)
+AutofarmCustardsButton.Position = UDim2.new(0.5, -100, 0.3, -15)
 AutofarmCustardsButton.Size = UDim2.new(0, 200, 0, 30)
 AutofarmCustardsButton.Font = Enum.Font.SourceSansBold
 AutofarmCustardsButton.Text = "Autofarm Custards: OFF"
@@ -561,10 +522,11 @@ local function autofarmCustards()
     while autofarmEnabled do
         -- First, send the character spawn request
         local args = {
-            [1] = "Player",
-            [2] = "HauntedMansion"
-        }
-        game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
+    [1] = "Player",
+    [2] = "CustardFacility"
+}
+
+game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
 
         -- Wait for 3 seconds
         wait(3)
@@ -602,46 +564,10 @@ AutofarmCustardsButton.MouseButton1Click:Connect(function()
     end
 end)
 
-AutoEatToastButton.Name = "AutoEatToastButton"
-AutoEatToastButton.Parent = ContentFrame
-AutoEatToastButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-AutoEatToastButton.Position = UDim2.new(0.5, -100, 0.7, -15)
-AutoEatToastButton.Size = UDim2.new(0, 200, 0, 30)
-AutoEatToastButton.Font = Enum.Font.SourceSansBold
-AutoEatToastButton.Text = "Auto Eat Toast [Req Tubby Toast]: OFF"
-AutoEatToastButton.TextWrapped = true
-AutoEatToastButton.TextColor3 = Color3.new(1, 1, 1)
-AutoEatToastButton.TextSize = 15.9
-
-local Button2Enabled = false
-
-local function applybutton2()
-while Button2Enabled do
-    local args = {
-    [1] = "eat"
-}
-
-game:GetService("ReplicatedStorage").sendAbility:FireServer(unpack(args))
-       task.wait();
-    end
-end
-
-AutoEatToastButton.MouseButton1Click:Connect(function()
-    Button2Enabled = not  Button2Enabled
-    if Button2Enabled then
-        AutoEatToastButton.Text = "Auto Eat Toast: ON"
-        AutoEatToastButton.TextSize = 25
-        spawn(applybutton2)
-    else
-        AutoEatToastButton.Text = "Auto Eat Toast: OFF"
-        AutoEatToastButton.TextSize = 25
-    end
-end)
-
 CustardEspButton.Name = "CustardEspButton"
 CustardEspButton.Parent = ContentFrame
 CustardEspButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-CustardEspButton.Position = UDim2.new(0.5, -100, 0.9, -15)
+CustardEspButton.Position = UDim2.new(0.5, -100, 0.5, -15)
 CustardEspButton.Size = UDim2.new(0, 200, 0, 30)
 CustardEspButton.Font = Enum.Font.SourceSansBold
 CustardEspButton.Text = "ESP Custards: OFF"
@@ -692,7 +618,7 @@ CustardEspButton.MouseButton1Click:Connect(function()
 end)
 
 BeatAllMapsButton.Name = "BeatAllMapsButton"
-BeatAllMapsButton.Parent = OtherFrame
+BeatAllMapsButton.Parent = ContentFrame
 BeatAllMapsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 BeatAllMapsButton.Position = UDim2.new(0.5, -100, 0.7, -15)
 BeatAllMapsButton.Size = UDim2.new(0, 200, 0, 30)
@@ -703,35 +629,6 @@ BeatAllMapsButton.TextColor3 = Color3.new(1, 1, 1)
 BeatAllMapsButton.TextSize = 25
 
 BeatAllMapsButton.MouseButton1Click:Connect(function()
-local args = {
-    [1] = "Player",
-    [2] = "HauntedMansion"
-}
-
-game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
-
-wait(4)
-
-        local custardParts = {
-            "c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
-            "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
-        }
-        
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
-        for _, partName in ipairs(custardParts) do
-            local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
-            end
-        end
-
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
-        wait(10)
-
 local args = {
     [1] = "Player",
     [2] = "TeletubbyLand"
@@ -906,7 +803,7 @@ end)
 EscapeTrainingMazeButton.Name = "EscapeTrainingMazeButton"
 EscapeTrainingMazeButton.Parent = OtherFrame
 EscapeTrainingMazeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-EscapeTrainingMazeButton.Position = UDim2.new(0.5, -100, 0.9, -15)
+EscapeTrainingMazeButton.Position = UDim2.new(0.5, -100, 0.7, -15)
 EscapeTrainingMazeButton.Size = UDim2.new(0, 200, 0, 30)
 EscapeTrainingMazeButton.Font = Enum.Font.SourceSansBold
 EscapeTrainingMazeButton.Text = "Escape Training Maze"
