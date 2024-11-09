@@ -472,7 +472,7 @@ RemoveLasersButton.Font = Enum.Font.SourceSansBold
 RemoveLasersButton.Text = "Clear Lasers [Training Maze]"
 RemoveLasersButton.TextWrapped = true
 RemoveLasersButton.TextColor3 = Color3.new(1, 1, 1)
-RemoveLasersButton.TextSize = 16
+RemoveLasersButton.TextSize = 18
 
 -- Function to delete the laser doors
 local function deleteLaserDoors()
