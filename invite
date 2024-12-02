@@ -33,6 +33,8 @@ local RemoveLasersButton = Instance.new("TextButton")
 local BeatAllMapsButton = Instance.new("TextButton")
 local EscapeTrainingMazeButton = Instance.new("TextButton")
 local DexExplorerButton = Instance.new("TextButton")
+local RunService = game:GetService("RunService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
 
 ScreenGui.Name = "AntiSlipperyUI"
 ScreenGui.Parent = game.CoreGui
@@ -51,7 +53,7 @@ TitleBar.Parent = MainFrame
 TitleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 TitleBar.Size = UDim2.new(1, 0, 0, 30)
 TitleBar.Font = Enum.Font.SourceSansBold
-TitleBar.Text = "Slendytubbies Vs Redux Menu"
+TitleBar.Text = "Ocfi Menu"
 TitleBar.TextColor3 = Color3.new(1, 1, 1)
 TitleBar.TextSize = 16
 TitleBar.TextXAlignment = Enum.TextXAlignment.Center
@@ -103,7 +105,7 @@ HalloweenTab.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 HalloweenTab.Position = UDim2.new(0, 0, 0, 60)
 HalloweenTab.Size = UDim2.new(1, 0, 0, 30)
 HalloweenTab.Font = Enum.Font.SourceSansBold
-HalloweenTab.Text = "Halloween"
+HalloweenTab.Text = "Event"
 HalloweenTab.TextWrapped = true
 HalloweenTab.TextColor3 = Color3.new(1, 1, 1)
 HalloweenTab.TextSize = 16
@@ -522,37 +524,56 @@ local function autofarmCustards()
     while autofarmEnabled do
         -- First, send the character spawn request
         local args = {
-    [1] = "Player",
-    [2] = "CustardFacility"
-}
-
-game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
+            [1] = "Player",
+            [2] = "CustardFacility"
+        }
+        game:GetService("ReplicatedStorage").sendCharacterSpawnRequest:FireServer(unpack(args))
 
         -- Wait for 3 seconds
         wait(3)
 
-        -- After 3 seconds, move the player to each custard part
+        -- After 3 seconds, move each custard part to the player's position
         local custardParts = {
             "c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
-        
+
         -- Get the LocalPlayer
         local LocalPlayer = game:GetService("Players").LocalPlayer
+        local playerPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
 
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
-        wait(3)
+        -- Optional: Delay before restarting the loop
+        wait(10)
     end
 end
+
 
 AutofarmCustardsButton.MouseButton1Click:Connect(function()
     autofarmEnabled = not autofarmEnabled
@@ -643,18 +664,34 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
+        -- Optional: Delay before restarting the loop
         wait(10)
 
 local args = {
@@ -671,19 +708,34 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
+        -- Optional: Delay before restarting the loop
         wait(10)
 
 local args = {
@@ -700,19 +752,34 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
+        -- Optional: Delay before restarting the loop
         wait(10)
 
 local args = {
@@ -729,19 +796,34 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
+        -- Optional: Delay before restarting the loop
         wait(10)
 
 local args = {
@@ -758,19 +840,34 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 
-        -- Optional: Add a delay before starting the next loop (e.g., 5 seconds)
+        -- Optional: Delay before restarting the loop
         wait(10)
 
 local args = {
@@ -787,15 +884,30 @@ wait(4)
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
         
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-
-        -- Loop through each custard part and move the player
+        -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
-            if part then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
-                wait(1) -- Wait 1 second before moving to the next part
+            if part and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+                
+                local connection
+                local startTime = tick()
+                connection = RunService.RenderStepped:Connect(function()
+                    if tick() - startTime < 1 and part then
+                        -- Generate a random offset for shaking
+                        local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
+                        local randomY = math.random(-3, 3) / 10
+                        local randomZ = math.random(-3, 3) / 10
+                        
+                        -- Update the part's position to shake around the humanoid
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                    else
+                        connection:Disconnect()
+                    end
+                end)
+
+                -- Wait for 1 second before moving to the next part
+                wait(0.7)
             end
         end
 end)
