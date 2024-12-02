@@ -523,6 +523,7 @@ local autofarmEnabled = false
 local function autofarmCustards()
     while autofarmEnabled do
         -- First, send the character spawn request
+        local LocalPlayer = game:GetService("Players").LocalPlayer
         local args = {
             [1] = "Player",
             [2] = "CustardFacility"
@@ -537,11 +538,7 @@ local function autofarmCustards()
             "c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
             "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"
         }
-
-        -- Get the LocalPlayer
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-        local playerPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-
+        
         -- Loop through each custard part
         for _, partName in ipairs(custardParts) do
             local part = workspace:FindFirstChild(partName, true)
@@ -550,7 +547,7 @@ local function autofarmCustards()
                 
                 local connection
                 local startTime = tick()
-                connection = RunService.RenderStepped:Connect(function()
+                connection = game:GetService("RunService").RenderStepped:Connect(function()
                     if tick() - startTime < 1 and part then
                         -- Generate a random offset for shaking
                         local randomX = math.random(-3, 3) / 10 -- Adjust magnitude as needed
@@ -558,22 +555,24 @@ local function autofarmCustards()
                         local randomZ = math.random(-3, 3) / 10
                         
                         -- Update the part's position to shake around the humanoid
-                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0) * CFrame.new(randomX, randomY, randomZ)
+                        part.CFrame = humanoidRootPart.CFrame * CFrame.new(randomX, randomY, randomZ)
                     else
                         connection:Disconnect()
                     end
                 end)
 
-                -- Wait for 1 second before moving to the next part
-                wait(0.7)
+                -- Wait for 0.7 seconds before moving to the next part
+                wait(0.5)
             end
         end
 
-        -- Optional: Delay before restarting the loop
-        wait(10)
+        -- Continuously check if the player is in the "Idle" team
+        if LocalPlayer.Team and LocalPlayer.Team.Name == "Idle" then
+            -- Wait for 5 seconds before restarting the loop
+            wait(5)
+        end
     end
 end
-
 
 AutofarmCustardsButton.MouseButton1Click:Connect(function()
     autofarmEnabled = not autofarmEnabled
