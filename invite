@@ -35,6 +35,8 @@ local EscapeTrainingMazeButton = Instance.new("TextButton")
 local DexExplorerButton = Instance.new("TextButton")
 local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
+local BuySantaHatButton = Instance.new("TextButton")
+local TextLabelWarn = Instance.new("TextLabel")
 
 ScreenGui.Name = "AntiSlipperyUI"
 ScreenGui.Parent = game.CoreGui
@@ -53,9 +55,9 @@ TitleBar.Parent = MainFrame
 TitleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 TitleBar.Size = UDim2.new(1, 0, 0, 30)
 TitleBar.Font = Enum.Font.SourceSansBold
-TitleBar.Text = "Ocfi Menu"
+TitleBar.Text = "Ocfi Menu-V3"
 TitleBar.TextColor3 = Color3.new(1, 1, 1)
-TitleBar.TextSize = 16
+TitleBar.TextSize = 20
 TitleBar.TextXAlignment = Enum.TextXAlignment.Center
 
 CloseButton.Name = "CloseButton"
@@ -66,7 +68,7 @@ CloseButton.Position = UDim2.new(1, -30, 0, 0)
 CloseButton.Font = Enum.Font.SourceSansBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.new(1, 1, 1)
-CloseButton.TextSize = 16
+CloseButton.TextSize = 25
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
@@ -87,7 +89,7 @@ AntiSlipperyTab.Size = UDim2.new(1, 0, 0, 30)
 AntiSlipperyTab.Font = Enum.Font.SourceSansBold
 AntiSlipperyTab.Text = "Main"
 AntiSlipperyTab.TextColor3 = Color3.new(1, 1, 1)
-AntiSlipperyTab.TextSize = 16
+AntiSlipperyTab.TextSize = 18
 
 CreditsTab.Name = "CreditsTab"
 CreditsTab.Parent = TabContainer
@@ -97,7 +99,7 @@ CreditsTab.Size = UDim2.new(1, 0, 0, 30)
 CreditsTab.Font = Enum.Font.SourceSansBold
 CreditsTab.Text = "Credits"
 CreditsTab.TextColor3 = Color3.new(1, 1, 1)
-CreditsTab.TextSize = 16
+CreditsTab.TextSize = 18
 
 HalloweenTab.Name = "HalloweenTab"
 HalloweenTab.Parent = TabContainer
@@ -105,10 +107,10 @@ HalloweenTab.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 HalloweenTab.Position = UDim2.new(0, 0, 0, 60)
 HalloweenTab.Size = UDim2.new(1, 0, 0, 30)
 HalloweenTab.Font = Enum.Font.SourceSansBold
-HalloweenTab.Text = "Event"
+HalloweenTab.Text = "Events"
 HalloweenTab.TextWrapped = true
 HalloweenTab.TextColor3 = Color3.new(1, 1, 1)
-HalloweenTab.TextSize = 16
+HalloweenTab.TextSize = 18
 
 OtherTab.Name = "OtherTab"
 OtherTab.Parent = TabContainer
@@ -119,7 +121,7 @@ OtherTab.Font = Enum.Font.SourceSansBold
 OtherTab.Text = "More"
 OtherTab.TextWrapped = true
 OtherTab.TextColor3 = Color3.new(1, 1, 1)
-OtherTab.TextSize = 16
+OtherTab.TextSize = 18
 
 MiscTab.Name = "MiscTab"
 MiscTab.Parent = TabContainer
@@ -130,7 +132,7 @@ MiscTab.Font = Enum.Font.SourceSansBold
 MiscTab.Text = "Misc"
 MiscTab.TextWrapped = true
 MiscTab.TextColor3 = Color3.new(1, 1, 1)
-MiscTab.TextSize = 16
+MiscTab.TextSize = 18
 
 TabIndicator.Name = "TabIndicator"
 TabIndicator.Parent = TabContainer
@@ -145,14 +147,13 @@ ContentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 ContentFrame.Position = UDim2.new(0, 100, 0, 30)
 ContentFrame.Size = UDim2.new(1, -100, 1, -30)
 
--- UI Button setup for AutoGetHalloweenHats
 AutoGetHalloweenHats.Name = "AutoGetHalloweenHats"
 AutoGetHalloweenHats.Parent = HalloweenFrame
 AutoGetHalloweenHats.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 AutoGetHalloweenHats.Position = UDim2.new(0.5, -100, 0.1, -15)
 AutoGetHalloweenHats.Size = UDim2.new(0, 200, 0, 30)
 AutoGetHalloweenHats.Font = Enum.Font.SourceSansBold
-AutoGetHalloweenHats.Text = "Auto Collect Hat Event: OFF"
+AutoGetHalloweenHats.Text = "Auto Collect Hat Drops: OFF"
 AutoGetHalloweenHats.TextWrapped = true
 AutoGetHalloweenHats.TextColor3 = Color3.new(1, 1, 1)
 AutoGetHalloweenHats.TextSize = 19.9
@@ -207,14 +208,13 @@ end)
 local LocalPlayer = Players.LocalPlayer
 local BlackListEnabled = false
 
--- Blacklist of users to check
 local blacklist = {
     "2cola1",
     "Splatoof",
     "harveythecreatorr",
     "ChairmanOfChairs",
     "Frostholl",
-    "kaileyy_09",
+    "kaileyy_09", -- a dick rider lol
     "MisterAwake",
     "texticks",
     "sti3ky",
@@ -226,30 +226,31 @@ local blacklist = {
     "sockmonkiie",
     "tweetroblox123123",
     "tomaan",
-    "joaquinmaximus"
+    "joaquinmaximus",
+    "pfmovementmakesmecry"
 }
 
--- Function to check for blacklisted users
+
 local function checkForBlacklistedPlayers()
     for _, otherPlayer in pairs(Players:GetPlayers()) do
         if table.find(blacklist, otherPlayer.Name) then
-            LocalPlayer:Kick("You have been kicked because admin " .. otherPlayer.Name .. " has joined. \n Join A Different Server \n or wait for the admin to leave \n This Is Made To Prevent Admins Banning You.")
-            return -- End the function after kicking
+            LocalPlayer:Kick("[Ocfi Menu] You have been kicked cause admin " .. otherPlayer.Name .. " has joined. \n Join A Different Server \n or wait for the admin to leave \n This Is Made To Prevent Admins Banning You.")
+            return
         end
     end
 end
 
--- Function that runs the blacklist check loop
+
 local function applyBlackList()
     while BlackListEnabled do
         checkForBlacklistedPlayers()
-        wait(0.1) -- Wait 0.1 seconds before the next check
+        wait(0.1)
     end
 end
 
--- Start the blacklist check automatically or however you prefer
-BlackListEnabled = true -- Set this to true to start the check
-spawn(applyBlackList) -- Start checking the blacklist
+
+BlackListEnabled = true
+spawn(applyBlackList)
 
 GetHallowHatButton.Name = "GetHallowHatButton"
 GetHallowHatButton.Parent = HalloweenFrame
@@ -271,6 +272,39 @@ local args = {
 
 game:GetService("Players").LocalPlayer.PlayerGui.equipableCustomization.HatPurchaseMain.BuyOrEquip:FireServer(unpack(args))
 end)
+
+BuySantaHatButton.Name = "BuySantaHatButton"
+BuySantaHatButton.Parent = HalloweenFrame
+BuySantaHatButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+BuySantaHatButton.Position = UDim2.new(0.5, -100, 0.5, -15)
+BuySantaHatButton.Size = UDim2.new(0, 200, 0, 30)
+BuySantaHatButton.Font = Enum.Font.SourceSansBold
+BuySantaHatButton.Text = "SantaHat [2.5k Custards]"
+BuySantaHatButton.TextWrapped = true
+BuySantaHatButton.TextColor3 = Color3.new(1, 1, 1)
+BuySantaHatButton.TextSize = 20
+
+BuySantaHatButton.MouseButton1Click:Connect(function()
+local args = {
+    [1] = "hat_santa",
+    [2] = "buy",
+    [3] = "hat"
+}
+
+game:GetService("Players").LocalPlayer.PlayerGui.equipableCustomization.HatPurchaseMain.BuyOrEquip:FireServer(unpack(args))
+end)
+
+TextLabelWarn.Name = "TextLabelWarn"
+TextLabelWarn.Parent = HalloweenFrame
+TextLabelWarn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TextLabelWarn.Position = UDim2.new(0.5, -100, 0.7, -15)
+TextLabelWarn.Size = UDim2.new(0, 200, 0, 50)
+TextLabelWarn.Font = Enum.Font.SourceSansBold
+TextLabelWarn.Text = "Hat drop events are currently unavailable—they’ll return around Halloween🎃"
+TextLabelWarn.TextWrapped = true
+TextLabelWarn.TextColor3 = Color3.new(1, 1, 1)
+TextLabelWarn.TextSize = 16
+TextLabelWarn.BorderColor3 = Color3.fromRGB(0, 162, 255)
 
 TeleportToLobbyButton.Name = "TeleportToLobbyButton"
 TeleportToLobbyButton.Parent = OtherFrame
@@ -969,13 +1003,13 @@ MiscFrame.Visible = false
 
 CreditsLabel.Name = "CreditsLabel"
 CreditsLabel.Parent = CreditsFrame
-CreditsLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+CreditsLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 CreditsLabel.Position = UDim2.new(0.5, -100, 0.3, -15)
-CreditsLabel.Size = UDim2.new(0, 200, 0, 30)
+CreditsLabel.Size = UDim2.new(0, 200, 0, 50)
 CreditsLabel.Font = Enum.Font.SourceSansBold
 CreditsLabel.Text = "Created by Ocfi,\n Join My Discord"
 CreditsLabel.TextColor3 = Color3.new(1, 1, 1)
-CreditsLabel.TextSize = 18
+CreditsLabel.TextSize = 20
 
 CopyDiscordLinkButton.Name = "CopyDiscordLinkButton"
 CopyDiscordLinkButton.Parent = CreditsFrame
@@ -994,6 +1028,9 @@ CopyDiscordLinkButton.MouseButton1Click:Connect(function()
         Text = "Copied to clipboard!";
         Duration = 5;
     })
+    CreditsLabel.Text = "Copied To ClipBoard"
+    wait(2)
+    CreditsLabel.Text = "Created by Ocfi,\n Join My Discord"
 end)
 
 
@@ -1084,15 +1121,15 @@ switchTab("Main")
 
 ToggleVisibilityButton.Name = "ToggleVisibilityButton"
 ToggleVisibilityButton.Parent = TitleBar
-ToggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-ToggleVisibilityButton.BorderColor3 = Color3.fromRGB(0, 162, 255)
+ToggleVisibilityButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+-- ToggleVisibilityButton.BorderColor3 = Color3.fromRGB(0, 162, 255)
 ToggleVisibilityButton.Position = UDim2.new(0, 239, 0, 0)  
 ToggleVisibilityButton.Size = UDim2.new(0, 30, 0, 30)
 ToggleVisibilityButton.Font = Enum.Font.SourceSansBold
 ToggleVisibilityButton.Text = "-"
 ToggleVisibilityButton.TextWrapped = true
 ToggleVisibilityButton.TextColor3 = Color3.new(1, 1, 1)
-ToggleVisibilityButton.TextSize = 20
+ToggleVisibilityButton.TextSize = 25
 
 local minimized = false
 
